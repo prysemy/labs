@@ -35,7 +35,7 @@ print('диск+кольцо: ', I3 * 1000)
 
 m11 = 721.2 / 1000
 m12 = 720.8 / 1000
-h = [0, 0.5, 1, 1.5, 2]
+h = [(i) ** 2 for i in [0, 0.5, 1, 1.5, 2]]
 th = [i / 10 for i in
       [15.48, 15.46, 15.46, 15.53, 15.53, 15.5, 15.63, 15.62, 15.59, 15.79, 15.75, 15.75, 15.99, 15.98, 15.92]]
 Th = [(th[i - 2] + th[i - 1] + th[i]) / 3 for i in range(2, len(th), 3)]
@@ -52,6 +52,6 @@ plt.scatter(h, [i * 1000 for i in Ih], s=np.array([1.2]) * len(h), color='black'
 plt.grid()
 
 
-plt.xlabel('h, см')
+plt.xlabel('h, см^2')
 plt.ylabel('I * 10^3, кг*м^2')
 plt.show()
