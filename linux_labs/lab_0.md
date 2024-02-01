@@ -27,9 +27,32 @@
 
 утечка памяти:
 
+```C++
+#include <bits/stdc++.h>
+
+int main() {
+	int **a;
+	a = new int*[3];
+	for (int i = 0; i < 3; i++)
+		a[i]= new int[2];
+	delete[] a;
+
+}
+```
+
 ![Текст с описанием картинки](memory_leak.png)
 
 использование неиницилизированных переменных:
+
+```C++
+
+#include <bits/stdc++.h>
+
+int main() {
+	int a[4] = {1, 2, 3, 4};
+	std::cout << a[4];
+}
+```
 
 ![Текст с описанием картинки](variable.png)
 
@@ -38,5 +61,14 @@
 ![Текст с описанием картинки](index.png)
 
 несогласованный delete:
+
+```C++
+#include <bits/stdc++.h>
+
+int main() {
+	char *f = new char[10];
+	delete f;
+}
+```
 
 ![Текст с описанием картинки](delete.png)
