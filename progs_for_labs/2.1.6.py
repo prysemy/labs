@@ -29,7 +29,7 @@ plt.xlabel("dP, атм")
 plt.ylabel("dT, K")
 plt.grid()
 plt.savefig("1.png")
-plt.show()
+# plt.show()
 
 m_1 = k1
 m_2 = k2
@@ -48,8 +48,8 @@ b2 = Cp * (m_3 * t3 - m_2 * t2) / 10 / (t3 - t2)
 # print(m_1, m_2, m_3)
 
 
-# print('a1, b1, a2, b2:')
-# print(a1, b1, a2, b2, sep=', ')
+print('a1, b1, a2, b2:')
+print(a1, b1, a2, b2, sep=', ')
 
 T_x = [1 / (T[i] + 273) for i in range(3)]
 m_y = [m_1, m_2, m_3]
@@ -59,17 +59,17 @@ plt.grid()
 plt.xlabel("1/T, 1/K")
 plt.ylabel("m, K/атм")
 plt.savefig("2.png")
-plt.show()
+# plt.show()
 
-k = np.polyfit(T_x, m_y, 1)[0]
-a = k * R / 2
+k, kk = np.polyfit(T_x, m_y, 1)[0], np.polyfit(T_x, m_y, 1)[1]
+a = k * R * Cp / 2 / 10 ** 5
 print('a =', a)
-b = k * T_x[0] - Cp * np.polyval(np.polyfit(T_x, m_y, 1), T_x)[0]
+b = kk * Cp
 print('b =', b)
 
 T_inv = 2 * a / R / b
-print('T_inv =', T_inv)
-T_inv1 = 2 * a1 / R / b1
-print('T_inv1 =', T_inv1)
-T_inv2 = 2 * a2 / R / b2
-print('T_inv2 =', T_inv2)
+print('T_inv =', abs(T_inv) + 273)
+T_inv1 = 2 * a1 / R / b1 * 10 ** 4
+print('T_inv1 =', abs(T_inv1) + 273)
+T_inv2 = 2 * a2 / R / b2 * 10 ** 4
+print('T_inv2 =', abs(T_inv2) + 273)
