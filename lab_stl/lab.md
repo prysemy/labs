@@ -130,3 +130,45 @@ int main() {
 ```
 ![3 list](3_1.png)
 ![3 forward](3_2.png)
+
+
+## 4. Среднее время удаления из начала односвязного списка. График: среднее время работы pop_front для list, forward_list и subforward_list от size. Определить асимптотику.
+для std::list и std::forward_list:
+```C++
+#include <fstream>
+#include <random>
+#include <chrono>
+#include <list>
+#include <forward_list>
+
+double get_time() {
+    return std::chrono::duration_cast<std::chrono::microseconds>
+                   (std::chrono::steady_clock::now().time_since_epoch()).count() / 1e6;
+}
+
+int main() {
+    std::list<int> l;
+    std::forward_list<int> fl;
+    std::ofstream f1("4_1.csv", std::ios::out);
+    std::ofstream f2("4_2.csv", std::ios::out);
+    for (unsigned int i = 0; i < 102400; i++) {
+        l.push_front(i);
+        fl.push_front(i);
+        if (i % 500 == 0) {
+            auto start1 = get_time();
+            l.pop_front();
+            auto finish1 = get_time();
+            auto time1 = finish1 - start1;
+            f1 << l.size() << " " << time1 << "\n";
+
+            auto start2 = get_time();
+            fl.pop_front();
+            auto finish2 = get_time();
+            auto time2 = finish2 - start2;
+            f2 << l.size() << " " << time2 << "\n";
+        }
+    }
+}
+```
+![4 list](4_1.png)
+![4 forward](4_2.png)
