@@ -20,3 +20,36 @@ int main() {
 }
 ```
 ![Зависимость размеров вектора](0.png)
+
+
+## 1. Среднее время вставки элемента в произвольное место вектора. Реализуйте для своего контейнера insert, измерьте среднее время для различного размера контейнера (size) при вставке в произвольное место, сравните со стандартным контейнером. График: среднее время вставки для vector и subvector от size. Определить асимптотику.
+для std::vector:
+```C++
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <random>
+#include <chrono>
+
+double get_time() {
+    return std::chrono::duration_cast<std::chrono::microseconds>
+                   (std::chrono::steady_clock::now().time_since_epoch()).count() / 1e6;
+}
+
+int main() {
+    std::vector<int> v;
+    std::ofstream f("1_1.csv", std::ios::out);
+    for (unsigned int i = 0; i < 102400; i++) {
+        v.push_back(i);
+        unsigned int x = rand() % (i + 1);
+        if (i % 500 == 0) {
+            auto start = get_time();
+            v.insert(v.begin() + x, i);
+            auto finish = get_time();
+            auto time = finish - start;
+            f << v.size() << " " << time << "\n";
+        }
+    }
+}
+```
+![1 vector](1_1.png)
