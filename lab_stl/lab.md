@@ -53,3 +53,36 @@ int main() {
 }
 ```
 ![1 vector](1_1.png)
+
+
+## 2. Среднее время удаления одного элемента из произвольного места вектора. Реализуйте для своего контейнера erase, измерьте среднее время для различного размера контейнера (size) при вставке в произвольное место, сравните со стандартным контейнером. График: среднее время удаления для vector и subvector от size. Определить асимптотику.
+
+```C++
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <random>
+#include <chrono>
+
+double get_time() {
+    return std::chrono::duration_cast<std::chrono::microseconds>
+                   (std::chrono::steady_clock::now().time_since_epoch()).count() / 1e6;
+}
+
+int main() {
+    std::vector<int> v;
+    std::ofstream f("2_1.csv", std::ios::out);
+    for (unsigned int i = 0; i < 102400; i++) {
+        v.push_back(i);
+        if (i % 500 == 0) {
+            unsigned int x = rand() % (i + 1);
+            auto start = get_time();
+            v.erase(v.begin() + x);
+            auto finish = get_time();
+            auto time = finish - start;
+            f << v.size() << " " << time << "\n";
+        }
+    }
+}
+```
+![2 vector](2_1.png)
