@@ -24,6 +24,7 @@ int main() {
 
 ## 1. Среднее время вставки элемента в произвольное место вектора. Реализуйте для своего контейнера insert, измерьте среднее время для различного размера контейнера (size) при вставке в произвольное место, сравните со стандартным контейнером. График: среднее время вставки для vector и subvector от size. Определить асимптотику.
 для std::vector:
+сложность: O(n)
 ```C++
 #include <iostream>
 #include <fstream>
@@ -57,6 +58,7 @@ int main() {
 
 ## 2. Среднее время удаления одного элемента из произвольного места вектора. Реализуйте для своего контейнера erase, измерьте среднее время для различного размера контейнера (size) при вставке в произвольное место, сравните со стандартным контейнером. График: среднее время удаления для vector и subvector от size. Определить асимптотику.
 для std::vector:
+сложность: O(n)
 ```C++
 #include <iostream>
 #include <fstream>
@@ -89,7 +91,8 @@ int main() {
 
 
 ## 3. Среднее время добавления в начало односвязного списка. График: среднее время работы push_front для list, forward_list и subforward_list от size. Определить асимптотику.
-для std::list и std::forward_list: 
+для std::list и std::forward_list:
+сложность: O(1)
 ```C++
 #include <fstream>
 #include <random>
@@ -172,3 +175,67 @@ int main() {
 ```
 ![4 list](4_1.png)
 ![4 forward](4_2.png)
+
+
+## 5. Среднее время добавления элемента в бинарное дерево. График: среднее время работы insert для set, map, multiset и multimap от size. Определить асимптотику.
+```C++
+#include <fstream>
+#include <random>
+#include <chrono>
+#include <set>
+#include <map>
+
+
+double get_time() {
+    return std::chrono::duration_cast<std::chrono::microseconds>
+                   (std::chrono::steady_clock::now().time_since_epoch()).count() / 1e6;
+}
+
+int main() {
+    std::set<int> s;
+    std::map<int, int> m;
+    std::multiset<int> ms;
+    std::multimap<int, int> mm;
+    std::ofstream f1("5_1.csv", std::ios::out);
+    std::ofstream f2("5_2.csv", std::ios::out);
+    std::ofstream f3("5_3.csv", std::ios::out);
+    std::ofstream f4("5_4.csv", std::ios::out);
+
+    for (unsigned int i = 0; i < 102400; i++) {
+        if (i % 500 == 0) {
+            auto start1 = get_time();
+            s.insert(i);
+            auto finish1 = get_time();
+            auto time1 = finish1 - start1;
+            f1 << s.size() << " " << time1 << "\n";
+
+            auto start2 = get_time();
+            m.insert({i, i});
+            auto finish2 = get_time();
+            auto time2 = finish2 - start2;
+            f2 << m.size() << " " << time2 << "\n";
+
+            auto start3 = get_time();
+            ms.insert(i);
+            auto finish3 = get_time();
+            auto time3 = finish3 - start3;
+            f3 << ms.size() << " " << time3 << "\n";
+
+            auto start4 = get_time();
+            mm.insert({i, i});
+            auto finish4 = get_time();
+            auto time4 = finish4 - start4;
+            f4 << mm.size() << " " << time4 << "\n";
+            continue;
+        }
+        s.insert(i);
+        m.insert({i, i});
+        ms.insert(i);
+        mm.insert({i, i});
+    }
+}
+```
+![5 set](5_1.png)
+![5 map](5_2.png)
+![5 multiset](5_3.png)
+![5 multimap](5_4.png)
