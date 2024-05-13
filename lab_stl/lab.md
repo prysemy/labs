@@ -201,37 +201,42 @@ int main() {
     std::ofstream f3("5_3.csv", std::ios::out);
     std::ofstream f4("5_4.csv", std::ios::out);
 
+    bool record = false;
+    auto start1 = get_time();
+    auto start2 = get_time();
+    auto start3 = get_time();
+    auto start4 = get_time();
+
     for (unsigned int i = 0; i < 102400; i++) {
-        if (i % 500 == 0) {
-            auto start1 = get_time();
-            s.insert(i);
-            auto finish1 = get_time();
-            auto time1 = finish1 - start1;
-            f1 << s.size() << " " << time1 << "\n";
-
-            auto start2 = get_time();
-            m.insert({i, i});
-            auto finish2 = get_time();
-            auto time2 = finish2 - start2;
-            f2 << m.size() << " " << time2 << "\n";
-
-            auto start3 = get_time();
-            ms.insert(i);
-            auto finish3 = get_time();
-            auto time3 = finish3 - start3;
-            f3 << ms.size() << " " << time3 << "\n";
-
-            auto start4 = get_time();
-            mm.insert({i, i});
-            auto finish4 = get_time();
-            auto time4 = finish4 - start4;
-            f4 << mm.size() << " " << time4 << "\n";
-            continue;
+        if (!record) {
+            start1 = get_time();
+            start2 = get_time();
+            start3 = get_time();
+            start4 = get_time();
+            record = true;
         }
         s.insert(i);
-        m.insert({i, i});
         ms.insert(i);
+        m.insert({i, i});
         mm.insert({i, i});
+        if (i != 0 and i % 500 == 0) {
+            auto finish1 = get_time();
+            auto finish2 = get_time();
+            auto finish3 = get_time();
+            auto finish4 = get_time();
+
+            auto time1 = (finish1 - start1) / 500;
+            auto time2 = (finish2 - start2) / 500;
+            auto time3 = (finish3 - start3) / 500;
+            auto time4 = (finish4 - start4) / 500;
+
+            f1 << s.size() << " " << time1 << "\n";
+            f2 << ms.size() << " " << time2 << "\n";
+            f3 << m.size() << " " << time3 << "\n";
+            f4 << mm.size() << " " << time4 << "\n";
+
+            record = false;
+        }
     }
 }
 ```
