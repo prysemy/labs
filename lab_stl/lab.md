@@ -543,6 +543,14 @@ int main() {
             auto finish2 = get_time();
             auto time2 = finish2 - start2;
             f2 << i << " " << time2 << "\n";
+
+            auto start3 = get_time();
+            for (int n: l) {
+                n++;
+            }
+            auto finish3 = get_time();
+            auto time3 = finish3 - start3;
+            f3 << i << " " << time3 << "\n";
         }
     }
 }
