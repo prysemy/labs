@@ -559,6 +559,14 @@ int main() {
             auto finish4 = get_time();
             auto time4 = finish4 - start4;
             f4 << i << " " << time4 << "\n";
+
+            auto start5 = get_time();
+            for (int n : s) {
+                n++;
+            }
+            auto finish5 = get_time();
+            auto time5 = finish5 - start5;
+            f5 << s.size() << " " << time5 << "\n";
         }
     }
 }
