@@ -535,6 +535,14 @@ int main() {
             auto finish1 = get_time();
             auto time1 = finish1 - start1;
             f1 << v.size() << " " << time1 << "\n";
+
+            auto start2 = get_time();
+            for (int n: fl) {
+                n++;
+            }
+            auto finish2 = get_time();
+            auto time2 = finish2 - start2;
+            f2 << i << " " << time2 << "\n";
         }
     }
 }
