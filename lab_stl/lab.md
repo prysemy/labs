@@ -28,6 +28,125 @@ int main() {
 <details>
 <summary><h3>1. Среднее время вставки элемента в произвольное место вектора.</h3></summary>
 Реализуйте для своего контейнера insert, измерьте среднее время для различного размера контейнера (size) при вставке в произвольное место, сравните со стандартным контейнером. График: среднее время вставки для vector и subvector от size. Определить асимптотику.
+
+subvector:
+```C++
+#include <iostream>
+#include <fstream>
+#include <random>
+#include <chrono>
+
+double get_time() {
+    return std::chrono::duration_cast<std::chrono::microseconds>
+                   (std::chrono::steady_clock::now().time_since_epoch()).count() / 1e6;
+}
+
+struct subvector {
+    int *mas;
+    unsigned int top;
+    unsigned int capacity;
+};
+
+bool init(subvector* sv) {
+    sv -> mas = NULL;
+    sv -> top = 0;
+    sv -> capacity = 0;
+    return true;
+}
+
+bool resize(subvector* sv, unsigned int new_capacity) {
+    sv -> capacity = new_capacity;
+    return true;
+}
+
+bool push_back(subvector* sv, int d) {
+    sv -> top += 1;
+    if (sv -> top - 1 == 0) {
+        if (sv -> capacity == 0) {
+            sv -> capacity = 1;
+            int* new_mas = new int[sv -> capacity];
+            delete[] sv -> mas;
+            sv -> mas = new_mas;
+        }
+        (sv -> mas)[sv -> top - 1] = d;
+    }
+    else if (sv -> top > sv -> capacity) {
+        unsigned int cur_cap = sv -> capacity;
+        resize(sv, cur_cap * 2);
+        int* new_mas = new int[sv -> capacity];
+        for (unsigned int i = 0; i < (sv -> top - 1); i++) {
+            new_mas[i] = (sv -> mas)[i];
+        }
+        delete[] sv -> mas;
+        sv -> mas = new_mas;
+        (sv -> mas)[sv -> top - 1] = d;
+    }
+    else {
+        (sv -> mas)[sv -> top - 1] = d;
+    }
+    return true;
+}
+
+bool insert(subvector* sv, int d, int i) {
+    std::cout <<"real";
+    sv -> top += 1;
+    if (sv -> top - 1 == 0) {
+        if (sv -> capacity == 0) {
+            sv -> capacity = 1;
+            int* new_mas = new int[sv -> capacity];
+            delete[] sv -> mas;
+            sv -> mas = new_mas;
+        }
+        (sv -> mas)[sv -> top - 1] = d;
+    }
+    else if (sv -> top > sv -> capacity) {
+        unsigned int cur_cap = sv -> capacity;
+        resize(sv, cur_cap * 2);
+        int* new_mas = new int[sv -> capacity];
+        for (unsigned int k = 0; k < i; k++) {
+            new_mas[k] = (sv -> mas)[k];
+        }
+        new_mas[i] = d;
+        std::cout <<"here";
+        for (unsigned int k = i + 1; k < (sv->top - 1); k++) {
+            new_mas[k] = (sv->mas)[k - 1];
+        }
+        delete[] sv -> mas;
+        sv -> mas = new_mas;
+    }
+    else {
+        int* new_mas = new int[sv -> capacity];
+        for (unsigned int k = 0; k < i; k++) {
+            new_mas[k] = (sv -> mas)[k];
+        }
+        new_mas[i] = d;
+        for (unsigned int k = i + 1; k < (sv->top - 1); k++) {
+            new_mas[k] = (sv->mas)[k - 1];
+        }
+        delete[] sv -> mas;
+        sv -> mas = new_mas;
+    }
+    return true;
+}
+
+int main() {
+    std::ofstream f("1_2.csv", std::ios::out);
+    subvector *s;
+    init(s);
+    for (int i = 0; i < 102400; i++) {
+        push_back(s, 1);
+        if (i % 500 == 0) {
+            unsigned int x = rand() % (i + 1);
+            auto start = get_time();
+            insert(s, 2, x);
+            auto finish = get_time();
+            auto time = finish - start;
+            f << s->top << " " << time << "\n";
+        }
+    }
+}
+```
+![1 subvector](1_2.png)
     
 для std::vector:
 сложность: O(n)
