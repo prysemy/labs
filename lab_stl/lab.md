@@ -219,33 +219,12 @@ bool push_back(subvector* sv, int d) {
     return true;
 }
 
-bool erase(subvector* sv, int i) {
-    sv -> top -= 1;
-    if (sv->top + 1 == 0) {
-        sv->top = 0;
+void erase(subvector *sv, unsigned int pos) {
+    for (unsigned int i = pos; i < sv->top - 1; i++) {
+        sv->mas[i] = sv->mas[i + 1];
     }
-    else if (sv -> top > sv -> capacity) {
-        unsigned int cur_cap = sv -> capacity;
-        resize(sv, cur_cap * 2);
-        int* new_mas = new int[sv -> capacity];
-        for (unsigned int k = 0; k < (sv->top); k++) {
-            if (k == i) continue;
-            new_mas[k] = (sv -> mas)[k];
-        }
-        delete[] sv -> mas;
-        sv -> mas = new_mas;
-    }
-    else {
-        int* new_mas = new int[sv -> capacity];
-        for (unsigned int k = 0; k < (sv->top); k++) {
-            if (k == i) continue;
-            new_mas[k] = (sv -> mas)[k];
-        }
-        delete[] sv -> mas;
-        sv -> mas = new_mas;
-    }
-    return true;
-}
+    sv->top--;
+}  
 
 int main() {
     std::ofstream f("2_2.csv", std::ios::out);
@@ -254,7 +233,7 @@ int main() {
     for (int i = 0; i < 102400; i++) {
         push_back(s, 1);
         if (i % 500 == 0) {
-            unsigned int x = rand() % (i + 1);
+            unsigned int x = rand() % (s->top + 1);
             auto start = get_time();
             erase(s, x);
             auto finish = get_time();
@@ -264,7 +243,7 @@ int main() {
     }
 }
 ```
-![2 subvector](2_2.png)
+![2 subvector](2__2.png)
 
 Аналогично функции insert, наша функция erase работает за O(logN).
 
