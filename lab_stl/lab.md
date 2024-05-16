@@ -245,7 +245,7 @@ int main() {
 ```
 ![2 subvector](2__2.png)
 
-Аналогично функции insert, наша функция erase работает за O(logN).
+Аналогично функции insert, наша функция erase работает за O(N).
 
 * std::vector:
 ```C++
