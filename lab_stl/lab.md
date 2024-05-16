@@ -89,45 +89,16 @@ bool push_back(subvector* sv, int d) {
     return true;
 }
 
-bool insert(subvector* sv, int d, int i) {
-    sv -> top += 1;
-    if (sv -> top - 1 == 0) {
-        if (sv -> capacity == 0) {
-            sv -> capacity = 1;
-            int* new_mas = new int[sv -> capacity];
-            delete[] sv -> mas;
-            sv -> mas = new_mas;
-        }
-        (sv -> mas)[sv -> top - 1] = d;
+void insert(subvector *sv, int d, unsigned int pos) {
+    if (sv->top + 1 > sv->capacity) {
+        resize(sv, sv->top * 2 + 1);
     }
-    else if (sv -> top > sv -> capacity) {
-        unsigned int cur_cap = sv -> capacity;
-        resize(sv, cur_cap * 2);
-        int* new_mas = new int[sv -> capacity];
-        for (unsigned int k = 0; k < i; k++) {
-            new_mas[k] = (sv -> mas)[k];
-        }
-        new_mas[i] = d;
-        std::cout <<"here";
-        for (unsigned int k = i + 1; k < (sv->top - 1); k++) {
-            new_mas[k] = (sv->mas)[k - 1];
-        }
-        delete[] sv -> mas;
-        sv -> mas = new_mas;
+    for (unsigned int i = sv->top - 1; i > pos; i--) {
+        sv->mas[i + 1] = sv->mas[i];
     }
-    else {
-        int* new_mas = new int[sv -> capacity];
-        for (unsigned int k = 0; k < i; k++) {
-            new_mas[k] = (sv -> mas)[k];
-        }
-        new_mas[i] = d;
-        for (unsigned int k = i + 1; k < (sv->top - 1); k++) {
-            new_mas[k] = (sv->mas)[k - 1];
-        }
-        delete[] sv -> mas;
-        sv -> mas = new_mas;
-    }
-    return true;
+    sv->mas[pos + 1] = sv->mas[pos];
+    sv->top++;
+    sv->mas[pos] = d;
 }
 
 int main() {
@@ -137,7 +108,7 @@ int main() {
     for (int i = 0; i < 102400; i++) {
         push_back(s, 1);
         if (i % 500 == 0) {
-            unsigned int x = rand() % (i + 1);
+            unsigned int x = rand() % (s->top + 1);
             auto start = get_time();
             insert(s, 2, x);
             auto finish = get_time();
@@ -149,7 +120,7 @@ int main() {
 ```
 ![1 subvector](1_2.png)
 
-Из графика можно сделать вывод, что асимптотика нашего insert - O(logN). 
+Из графика можно сделать вывод, что асимптотика нашего insert - O(N). 
     
 * std::vector:
 ```C++
