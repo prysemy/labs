@@ -36,22 +36,25 @@ print('R_{диф} =', k * 1000)
 
 plt.plot(U_5, I_5, label='$I_p$ = 5мА', color='blue')
 plt.scatter(U_5, I_5, color='blue', s=np.array([1]) * len(U_5))
-plt.hlines(110, 0, 26, color='blue')
-print('ионный ток для I_p = 5мА: ', 110)
+plt.axline((U_5[0], I_5[0]), (U_5[1], I_5[1]), color='blue')
+Ii_5 = I_5[0] - U_5[0] * (I_5[1] - I_5[0]) / (U_5[1] - U_5[0])
+print('ионный ток для I_p = 5мА: ', round(Ii_5, 1))
 k1 = (I_5[10] - I_5[11]) / (U_5[10] - U_5[11]) / 10 ** 6
 print('наклон dI/dU в начале координат для I_p = 5мА: ', k1)
 
 plt.plot(U_3, I_3, label='$I_p$ = 3мА', color='red')
 plt.scatter(U_3, I_3, color='red', s=np.array([1]) * len(U_3))
-plt.hlines(66, 0, 26, color='red')
-print('ионный ток для I_p = 3мА: ', 66)
+plt.axline((U_3[0], I_3[0]), (U_3[1], I_3[1]), color='red')
+Ii_3 = I_3[0] - U_3[0] * (I_3[1] - I_3[0]) / (U_3[1] - U_3[0])
+print('ионный ток для I_p = 3мА: ', round(Ii_3, 1))
 k2 = (I_3[10] - I_3[11]) / (U_3[10] - U_3[11]) / 10 ** 6
 print('наклон dI/dU в начале координат для I_p = 3мА: ', k2)
 
 plt.plot(U_1_5, I_1_5, label='$I_p$ = 1.5мА', color='green')
 plt.scatter(U_1_5, I_1_5, color='green', s=np.array([1]) * len(U_1_5))
-plt.hlines(34, 0, 26, color='green')
-print('ионный ток для I_p = 1.5мА: ', 34)
+plt.axline((U_1_5[0], I_1_5[0]), (U_1_5[1], I_1_5[1]), color='green')
+Ii_1_5 = I_1_5[0] - U_1_5[0] * (I_1_5[1] - I_1_5[0]) / (U_1_5[1] - U_1_5[0])
+print('ионный ток для I_p = 1.5мА: ', round(Ii_1_5, 1))
 k3 = (I_1_5[10] - I_1_5[11]) / (U_1_5[10] - U_1_5[11]) / 10 ** 6
 print('наклон dI/dU в начале координат для I_p = 1.5мА: ', k3)
 
@@ -63,33 +66,33 @@ plt.savefig('2.png')
 plt.show()
 
 k = 1.38 * 10 ** (-23)
-e = 1.6 * 10 ** (-19)
-Ii = [110 / 10 ** 6, 66 / 10 ** 6, 34 / 10 ** 6]
-T1 = 0.5 * e * Ii[0] / k1 / k
-T2 = 0.5 * e * Ii[1] / k2 / k
-T3 = 0.5 * e * Ii[2] / k3 / k
-print('Температуры электронов: ', round(T1), round(T2), round(T3), 'K')
+e_si = 1.6 * 10 ** (-19)
+Ii = [Ii_5, Ii_3, Ii_1_5]
+T1 = 0.5 * e_si * Ii[0] * 10 ** (-6) / (k1 * k)
+T2 = 0.5 * e_si * Ii[1] * 10 ** (-6) / (k2 * k)
+T3 = 0.5 * e_si * Ii[2] * 10 ** (-6) / (k3 * k)
+print('Температуры электронов: ', T1, T2, T3, 'K')
 
 S = 3.27 / 10 ** 6
 m = 22 * 1.66 * 10 ** (-27)
-n1 = Ii[0] / 0.4 / e / S * (m / 2 / k / T1) ** 0.5
-n2 = Ii[1] / 0.4 / e / S * (m / 2 / k / T2) ** 0.5
-n3 = Ii[2] / 0.4 / e / S * (m / 2 / k / T3) ** 0.5
+n1 = Ii[0] / 10 ** 6 / 0.4 / e_si / S * (m / 2 / k / T1) ** 0.5
+n2 = Ii[1] / 10 ** 6 / 0.4 / e_si / S * (m / 2 / k / T2) ** 0.5
+n3 = Ii[2] / 10 ** 6 / 0.4 / e_si / S * (m / 2 / k / T3) ** 0.5
 print('Концентрации: ', n1, n2, n3)
 
 Te = [T1, T2, T3]
 ne = [n1, n2, n3]
 me = 9.1 * 10 ** (-31)
 
-w = [(4 * 3.1415 * ne[i] * e ** 2 / me) ** 0.5 for i in range(3)]
+w = [(4 * 3.1415 * ne[i] * e_si ** 2 / me) ** 0.5 for i in range(3)]
 print('w:', w)
 
 e = 4.8 * 10 ** (-10)
-r_de = [(k * Te[i] * 10 ** 7 / 4 / 3.1415 / ne[i] / 10 ** 6 / e ** 2) ** 0.5 for i in range(3)]
+r_de = [(k * Te[i] * 10 ** 7 / 4 / 3.1415 / ne[i] * 10 ** 6 / e ** 2) ** 0.5 for i in range(3)]
 print('r_de', r_de)
 
 Ti = 300
-r_d = [(k * Ti / 4 / 3.1415 / ne[i] / 10 ** 6 / e ** 2) ** 0.5 for i in range(3)]
+r_d = [(k * Ti / 4 / 3.1415 / ne[i] * 10 ** 6 / e ** 2) ** 0.5 for i in range(3)]
 print('r_d', r_d)
 
 Nd = [4 / 3 * 3.1415 * ne[i] * r_d[i] for i in range(3)]
