@@ -46,6 +46,8 @@ plt.show()
 ```Python
 frames = open('frames.dat.txt').readlines()
 fig2, axs2 = plt.subplots(nrows=len(frames) // 4, ncols=2)
+fig2.set_figheight(7)
+fig2.set_figwidth(11)
 num_g = 0
 for i in range(0, len(frames), 2):
     x = list(map(float, frames[i].split()))
