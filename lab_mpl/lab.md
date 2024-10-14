@@ -66,3 +66,99 @@ plt.show()
 Получаем такие графики:
 
 ![График 2](2.png)
+
+
+
+### 3. Распределение оценок по препам и по группам
+Разбиваем данные вначале на один словарь преподов
+```Python
+stud = open('students.csv').readlines()
+preps = dict()
+groups = dict()
+for s in stud:
+    p, g, m = s.split(';')
+    if p not in preps.keys():
+        preps[p] = [int(m)]
+    else:
+        preps[p].append(int(m))
+    if g not in groups.keys():
+        groups[g] = [int(m)]
+    else:
+        groups[g].append(int(m))
+```
+
+Потом на два словаря оценок и групп, где ключи - это количество определенных оценок у определенного препода
+```Python
+p = preps.keys()
+marks_per_prep = dict()
+all_marks = [j for j in range(3, 11)]
+for prep in p:
+    marks = set(preps[prep])
+    for mark in marks:
+        if mark not in marks_per_prep.keys():
+            marks_per_prep[mark] = [preps[prep].count(mark)]
+        else:
+            marks_per_prep[mark].append(preps[prep].count(mark))
+    for mark in all_marks:
+        if mark not in marks:
+            if mark not in marks_per_prep.keys():
+                marks_per_prep[mark] = [0]
+            else:
+                marks_per_prep[mark].append(0)
+
+g = groups.keys()
+marks_per_groups = dict()
+for group in g:
+    marks = set(groups[group])
+    for mark in marks:
+        if mark not in marks_per_groups.keys():
+            marks_per_groups[mark] = [groups[group].count(mark)]
+        else:
+            marks_per_groups[mark].append(groups[group].count(mark))
+    for mark in all_marks:
+        if mark not in marks:
+            if mark not in marks_per_groups.keys():
+                marks_per_groups[mark] = [0]
+            else:
+                marks_per_groups[mark].append(0)
+```
+
+Теперь строим необхожимые гистограммы
+```Python
+width = 0.1
+
+x1 = np.arange(len(p))
+multi = 0
+fig3, ax3 = plt.subplots(layout='constrained')
+for attribute, measurement in marks_per_prep.items():
+    offset = width * multi
+    rects = ax3.bar(x1 + offset, measurement, width, label=attribute)
+    ax3.bar_label(rects, padding=3)
+    multi += 1
+ax3.set_ylabel('students')
+ax3.set_title('Marks per preps')
+ax3.set_xticks(x1 + width, p)
+ax3.legend(loc='upper left', ncols=3)
+plt.show()
+
+x2 = np.arange(len(g))
+multi = 0
+fig4, ax4 = plt.subplots(layout='constrained')
+multi = 0
+for attribute, measurement in marks_per_groups.items():
+    offset = width * multi
+    rects = ax4.bar(x2 + offset, measurement, width, label=attribute)
+    ax4.bar_label(rects, padding=3)
+    multi += 1
+ax4.set_ylabel('students')
+ax4.set_title('Marks per groups')
+ax4.set_xticks(x2 + width, g)
+ax4.legend(loc='upper left', ncols=3)
+plt.show()
+```
+
+Получаем такие гистограммы:
+
+![График 3_1](3_1.png)
+
+![График 3_2](3_2.png)
