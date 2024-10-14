@@ -16,18 +16,25 @@ n5 = int(dm5[0])
 Строим точки с помощью `scatter`:
 ```Python
 fig1, axs1 = plt.subplots(nrows=5, ncols=1)
-axs1[0].scatter([float(i.split()[0]) for i in dm1[1:n1]], [float(i.split()[1]) for i in dm1[1:n1]])
-axs1[0].set_title('Number of points: ' + str(n1))
-axs1[1].scatter([float(i.split()[0]) for i in dm2[1:n2]], [float(i.split()[1]) for i in dm2[1:n2]])
-axs1[1].set_title('Number of points: ' + str(n2))
-axs1[2].scatter([float(i.split()[0]) for i in dm3[1:n3]], [float(i.split()[1]) for i in dm3[1:n3]])
-axs1[2].set_title('Number of points: ' + str(n3))
-axs1[3].scatter([float(i.split()[0]) for i in dm4[1:n4]], [float(i.split()[1]) for i in dm4[1:n4]])
-axs1[3].set_title('Number of points: ' + str(n4))
-axs1[4].scatter([float(i.split()[0]) for i in dm5[1:n5]], [float(i.split()[1]) for i in dm5[1:n5]])
-axs1[4].set_title('Number of points: ' + str(n5))
+fig1.set_figheight(15)
+axs1[0].scatter([float(i.split()[0]) for i in dm1[1:n1]], [float(i.split()[1]) for i in dm1[1:n1]],
+                label='Number of points: ' + str(n1))
+axs1[0].legend()
+axs1[1].scatter([float(i.split()[0]) for i in dm2[1:n2]], [float(i.split()[1]) for i in dm2[1:n2]],
+                label='Number of points: ' + str(n2))
+axs1[1].legend()
+axs1[2].scatter([float(i.split()[0]) for i in dm3[1:n3]], [float(i.split()[1]) for i in dm3[1:n3]],
+                label='Number of points: ' + str(n3))
+axs1[2].legend()
+axs1[3].scatter([float(i.split()[0]) for i in dm4[1:n4]], [float(i.split()[1]) for i in dm4[1:n4]],
+                label='Number of points: ' + str(n4))
+axs1[3].legend()
+axs1[4].scatter([float(i.split()[0]) for i in dm5[1:n5]], [float(i.split()[1]) for i in dm5[1:n5]],
+                label='Number of points: ' + str(n5))
+axs1[4].legend()
 plt.show()
 ```
 
 Получаем такие графики:
+
 ![График 1](1.png)
