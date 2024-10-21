@@ -104,19 +104,20 @@ for i in range(len(users)):
         inf = group_out[login.index(users[i])]
         group = group_faculty[login.index(users[i])]
         if group not in average_group.keys():
-            average_group[group] = solved[i] / 8
+            average_group[group] = [solved[i], 1]
         else:
-            average_group[group] += solved[i] / 8
+            average_group[group][0] += solved[i]
+            average_group[group][1] += 1
         if inf not in average_info.keys():
-            average_info[inf] = solved[i] / 8
+            average_info[inf] = [solved[i], 1]
         else:
-            average_info[inf] += solved[i] / 8
+            average_info[inf][0] += solved[i]
+            average_info[inf][1] += 1
 
 x1 = list(average_group.keys())
-y1 = list(i[1] for i in average_group.items())
+y1 = list(round(i[1][0] / i[1][1], 2) for i in average_group.items())
 x2 = list(average_info.keys())
-y2 = list(i[1] for i in average_info.items())
-
+y2 = list(round(i[1][0] / i[1][1], 2) for i in average_info.items())
 plt.bar(x1, y1)
 for i in range(len(x1)):
     plt.text(x1[i], y1[i], y1[i], ha='center')
