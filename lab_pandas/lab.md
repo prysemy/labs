@@ -80,3 +80,63 @@ plt.show()
 
 ![Красивый график](pd1.png)
 
+
+
+
+## Эпизод 3
+Однажды один факультет 1-го сентября 1-го курса писал входное тестирование по информатике. В архиве xlsx с данными групп от деканата и html-ная таблица результатов из ejudge. 
+
+В xlsx-файле логины студентов (поле login), номера их факультетских групп (поле group_faculty), номера их групп после распределения на группы по информатике (поле group_out).
+
+### Задание 1: построить графики среднего количества решённых задач (а) по факультетским группам, (б) по группам по информатике
+```Python
+info = pd.read_excel('students_info.xlsx')
+login = list(info['login'])
+group_faculty = list(info['group_faculty'])
+group_out = list(info['group_out'])
+results = pd.read_html('results_ejudge.html')[0]
+users = list(results['User'])
+solved = list(results['Solved'])
+average_group = dict()
+average_info = dict()
+for i in range(len(users)):
+    if users[i] in login:
+        inf = group_out[login.index(users[i])]
+        group = group_faculty[login.index(users[i])]
+        if group not in average_group.keys():
+            average_group[group] = solved[i] / 8
+        else:
+            average_group[group] += solved[i] / 8
+        if inf not in average_info.keys():
+            average_info[inf] = solved[i] / 8
+        else:
+            average_info[inf] += solved[i] / 8
+
+x1 = list(average_group.keys())
+y1 = list(i[1] for i in average_group.items())
+x2 = list(average_info.keys())
+y2 = list(i[1] for i in average_info.items())
+
+plt.bar(x1, y1)
+for i in range(len(x1)):
+    plt.text(x1[i], y1[i], y1[i], ha='center')
+plt.grid()
+plt.xlabel('group_faculty')
+plt.ylabel('average solved')
+plt.savefig('pd2.png')
+plt.show()
+plt.bar(x2, y2)
+for i in range(len(x2)):
+    plt.text(x2[i], y2[i], y2[i], ha='center')
+plt.grid()
+plt.xlabel('group_out')
+plt.ylabel('average solved')
+plt.savefig('pd3.png')
+plt.show()
+```
+
+Полученные графики:
+
+![Среднее 1](pd2.png)
+
+![Среднее 2](pd3.png)
