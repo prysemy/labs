@@ -7,29 +7,35 @@
 import pandas as pd
 
 transactions = pd.read_csv('transactions.csv', delimiter=',')
-transactions = transactions.drop(transactions[transactions['STATUS'] != 'OK'].index)
-contractor = list(transactions['CONTRACTOR'])
-sums = list(transactions['SUM'])
-print('Самые крупные платежи:', *sorted(sums, reverse=True)[:3])
+#transactions = transactions.drop(transactions[transactions['STATUS'] != 'OK'].index)
+#contractor = list(transactions['CONTRACTOR'])
+#sums = list(transactions['SUM'])
+#print('Самые крупные платежи:', *sorted(sums, reverse=True)[:3])
+
+print(transactions[transactions['STATUS'] == 'OK'].sort_values(by='SUM').drop_duplicates('SUM').loc[:, 'SUM'][-3:])
 ```
 
-Вывод программы:
+Вывод программы(второй столбец соотвествует трём максимальным выплатам):
 ```
-Самые крупные платежи: 100500 1000 999
+3947       999
+4451      1000
+5085    100500
 ```
 
 ### Задача 2: определить полную сумму реально проведённых платежей в адрес Umbrella, Inc.
 ```Python
-sum_to_um = 0
-for c in contractor:
-    if c == 'Umbrella, Inc':
-        sum_to_um += int(sums[contractor.index(c)])
-print('Полная сумма, отправленная Umbrella, Inc:', sum_to_um)
+#sum_to_um = 0
+#for c in contractor:
+#    if c == 'Umbrella, Inc':
+#        sum_to_um += int(sums[contractor.index(c)])
+#print('Полная сумма, отправленная Umbrella, Inc:', sum_to_um)
+
+print(sum(transactions[transactions['STATUS'] == 'OK'][transactions['CONTRACTOR'] == 'Umbrella, Inc'].loc[:, 'SUM']))
 ```
 
-Вывод программы:
+Вывод программы(полная сумма платежей для Umbrella, Inc):
 ```
-Полная сумма, отправленная Umbrella, Inc: 1286220
+925719
 ```
 
 
