@@ -2,16 +2,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 transactions = pd.read_csv('transactions.csv', delimiter=',')
-transactions = transactions.drop(transactions[transactions['STATUS'] != 'OK'].index)
-contractor = list(transactions['CONTRACTOR'])
-sums = list(transactions['SUM'])
-print('Самые крупные платежи:', *sorted(sums, reverse=True)[:3])
+#transactions = transactions.drop(transactions[transactions['STATUS'] != 'OK'].index)
+#contractor = list(transactions['CONTRACTOR'])
+#sums = list(transactions['SUM'])
+#print('Самые крупные платежи:', *sorted(sums, reverse=True)[:3])
+print(transactions[transactions['STATUS'] == 'OK'].sort_values(by='SUM').drop_duplicates('SUM').loc[:, 'SUM'][-3:])
 
-sum_to_um = 0
-for c in contractor:
-    if c == 'Umbrella, Inc':
-        sum_to_um += int(sums[contractor.index(c)])
-print('Полная сумма, отправленная Umbrella, Inc:', sum_to_um)
+#sum_to_um = 0
+#for c in contractor:
+#    if c == 'Umbrella, Inc':
+#        sum_to_um += int(sums[contractor.index(c)])
+#print('Полная сумма, отправленная Umbrella, Inc:', sum_to_um)
+print(sum(transactions[transactions['STATUS'] == 'OK'][transactions['CONTRACTOR'] == 'Umbrella, Inc'].loc[:, 'SUM']))
+
 
 flights = pd.read_csv('flights.csv', delimiter=',')
 cargo = list(flights['CARGO'])
