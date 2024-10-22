@@ -34,47 +34,46 @@ print(transactions[transactions['STATUS'] == 'OK'][transactions['CONTRACTOR'] ==
 ### Задача: посчитать, сколько рейсов выполнила каждая авиакомпания, полную стоимость и полную массу перевезённых ей грузов. Построить график уместного вида с результатами.
 ```Python
 flights = pd.read_csv('flights.csv', delimiter=',')
-cargo = list(flights['CARGO'])
-price = list(flights['PRICE'])
-weight = list(flights['WEIGHT'])
-cargos = dict()
-for c in cargo:
-    i = cargo.index(c)
-    if c not in cargos.keys():
-        cargos[c] = [price[i], weight[i]]
-    else:
-        cargos[c][0] += price[i]
-        cargos[c][1] += weight[i]
-p = [cargos[k][0] for k in cargos.keys()]
-w = [cargos[k][1] for k in cargos.keys()]
-# print(cargos)
-fig, ax = plt.subplots(nrows=1, ncols=2)
-fig.set_size_inches(11, 6)
-ax[0].bar(list(cargos.keys()), p)
-for i in range(len(list(cargos.keys()))):
-    ax[0].text(i, p[i] // 2, p[i], ha='center')
-ax[0].grid()
-ax[0].set_xlabel('cargo')
-ax[0].set_ylabel('full price')
-ax[1].bar(list(cargos.keys()), w)
-for i in range(len(list(cargos.keys()))):
-    ax[1].text(i, w[i] // 2, w[i], ha='center')
-ax[1].grid()
-ax[1].set_xlabel('cargo')
-ax[1].set_ylabel('full weight')
-plt.savefig('pd1.png')
+print(flights.groupby(flights.loc[:, 'CARGO'], as_index=False).size())
+flights.groupby(flights.loc[:, 'CARGO'], as_index=False).size().plot.pie(y='size',
+                                                                         labels=flights.loc[:,
+                                                                                'CARGO'].drop_duplicates(),
+                                                                         autopct='%1.2f%%', startangle=300, fontsize=13,
+                                                                         title='Количество перелетов')
+plt.savefig('pd11.png')
 plt.show()
+price_Jumbo = flights[flights['CARGO'] == 'Jumbo'].loc[:, 'PRICE'].sum()
+price_Medium = flights[flights['CARGO'] == 'Medium'].loc[:, 'PRICE'].sum()
+price_Numble = flights[flights['CARGO'] == 'Nimble'].loc[:, 'PRICE'].sum()
+pd.DataFrame({'PRICES': [price_Jumbo, price_Medium, price_Numble]}).plot.pie(y='PRICES',
+                                                                             labels=flights.loc[:,
+                                                                                    'CARGO'].drop_duplicates(),
+                                                                             autopct='%1.2f%%', startangle=300,
+                                                                             fontsize=13,
+                                                                             title='Стоимость')
+plt.savefig('pd12.png')
+plt.show()
+weight_Jumbo = flights[flights['CARGO'] == 'Jumbo'].loc[:, 'WEIGHT'].sum()
+weight_Medium = flights[flights['CARGO'] == 'Medium'].loc[:, 'WEIGHT'].sum()
+weight_Numble = flights[flights['CARGO'] == 'Nimble'].loc[:, 'WEIGHT'].sum()
+pd.DataFrame({'WEIGHTS': [weight_Jumbo, weight_Medium, weight_Numble]}).plot.pie(y='WEIGHTS',
+                                                                             labels=flights.loc[:,
+                                                                                    'CARGO'].drop_duplicates(),
+                                                                             autopct='%1.2f%%', startangle=30,
+                                                                             fontsize=13,
+                                                                             title='Вес')
+plt.savefig('pd13.png')
+plt.show()
+
 ```
 
-Полученный словарь:
-```
-{'Nimble': [770000, 8000], 'Jumbo': [58650, 19650], 'Medium': [48400, 11300]}
-```
+Графики:
 
-И график:
+![pie1](pd11.png)
 
-![Красивый график](pd1.png)
+![pie2](pd12.png)
 
+![pie3](pd13.png)
 
 
 
