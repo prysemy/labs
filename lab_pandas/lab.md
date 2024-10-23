@@ -33,47 +33,59 @@ print(transactions[transactions['STATUS'] == 'OK'][transactions['CONTRACTOR'] ==
 
 ### Задача: посчитать, сколько рейсов выполнила каждая авиакомпания, полную стоимость и полную массу перевезённых ей грузов. Построить график уместного вида с результатами.
 ```Python
+import numpy as np
+
+def func(pct, allvals):
+    absolute = int(np.round(pct / 100. * np.sum(allvals)))
+    return f"{pct:.1f}%\n({absolute:d})"
+
+
 flights = pd.read_csv('flights.csv', delimiter=',')
-print(flights.groupby(flights.loc[:, 'CARGO'], as_index=False).size())
+s = flights.groupby(flights.loc[:, 'CARGO'], as_index=False).size().loc[:, 'size']
+siz = [s[0], s[1], s[2]]
 flights.groupby(flights.loc[:, 'CARGO'], as_index=False).size().plot.pie(y='size',
                                                                          labels=flights.loc[:,
                                                                                 'CARGO'].drop_duplicates(),
-                                                                         autopct='%1.2f%%', startangle=300, fontsize=13,
+                                                                         autopct=lambda pct: func(pct, siz),
+                                                                         startangle=300, fontsize=13,
                                                                          title='Количество перелетов')
-plt.savefig('pd11.png')
+plt.savefig('pd1_1.png')
 plt.show()
 price_Jumbo = flights[flights['CARGO'] == 'Jumbo'].loc[:, 'PRICE'].sum()
 price_Medium = flights[flights['CARGO'] == 'Medium'].loc[:, 'PRICE'].sum()
 price_Numble = flights[flights['CARGO'] == 'Nimble'].loc[:, 'PRICE'].sum()
+pric = [price_Jumbo, price_Medium, price_Numble]
 pd.DataFrame({'PRICES': [price_Jumbo, price_Medium, price_Numble]}).plot.pie(y='PRICES',
                                                                              labels=flights.loc[:,
                                                                                     'CARGO'].drop_duplicates(),
-                                                                             autopct='%1.2f%%', startangle=300,
-                                                                             fontsize=13,
+                                                                             autopct=lambda pct: func(pct, pric),
+                                                                             startangle=300,
+                                                                             fontsize=11,
                                                                              title='Стоимость')
-plt.savefig('pd12.png')
+plt.savefig('pd1_2.png')
 plt.show()
 weight_Jumbo = flights[flights['CARGO'] == 'Jumbo'].loc[:, 'WEIGHT'].sum()
 weight_Medium = flights[flights['CARGO'] == 'Medium'].loc[:, 'WEIGHT'].sum()
 weight_Numble = flights[flights['CARGO'] == 'Nimble'].loc[:, 'WEIGHT'].sum()
+weig = [weight_Jumbo, weight_Medium, weight_Numble]
 pd.DataFrame({'WEIGHTS': [weight_Jumbo, weight_Medium, weight_Numble]}).plot.pie(y='WEIGHTS',
-                                                                             labels=flights.loc[:,
-                                                                                    'CARGO'].drop_duplicates(),
-                                                                             autopct='%1.2f%%', startangle=30,
-                                                                             fontsize=13,
-                                                                             title='Вес')
-plt.savefig('pd13.png')
+                                                                                 labels=flights.loc[:,
+                                                                                        'CARGO'].drop_duplicates(),
+                                                                                 autopct=lambda pct: func(pct, weig),
+                                                                                 startangle=30,
+                                                                                 fontsize=13,
+                                                                                 title='Вес')
+plt.savefig('pd1_3.png')
 plt.show()
-
 ```
 
 Графики:
 
-![pie1](pd11.png)
+![pie1](pd1_1.png)
 
-![pie2](pd12.png)
+![pie2](pd1_2.png)
 
-![pie3](pd13.png)
+![pie3](pd1_3.png)
 
 
 
@@ -132,9 +144,9 @@ plt.show()
 
 Полученные графики:
 
-![Среднее 1](pd2.png)
+![Среднее 1](pd2_1.png)
 
-![Среднее 2](pd3.png)
+![Среднее 2](pd2_2.png)
 
 
 ### Задание 2: определить, из каких факультетских групп пришли и в какие группы по информатике попали люди, которые смогли пройти более одного теста в хотя бы одной из двух последних задач.(Задачи G и H в таблице, каждый тест даёт 10 баллов)
