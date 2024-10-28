@@ -96,57 +96,52 @@ plt.show()
 
 ### Задание 1: построить графики среднего количества решённых задач (а) по факультетским группам, (б) по группам по информатике
 ```Python
-info = pd.read_excel('students_info.xlsx')
-login = list(info['login'])
-group_faculty = list(info['group_faculty'])
-group_out = list(info['group_out'])
+info = pd.read_excel('students_info.xlsx').dropna()
 results = pd.read_html('results_ejudge.html')[0]
-users = list(results['User'])
-solved = list(results['Solved'])
-average_group = dict()
-average_info = dict()
-for i in range(len(users)):
-    if users[i] in login:
-        inf = group_out[login.index(users[i])]
-        group = group_faculty[login.index(users[i])]
-        if group not in average_group.keys():
-            average_group[group] = [solved[i], 1]
-        else:
-            average_group[group][0] += solved[i]
-            average_group[group][1] += 1
-        if inf not in average_info.keys():
-            average_info[inf] = [solved[i], 1]
-        else:
-            average_info[inf][0] += solved[i]
-            average_info[inf][1] += 1
+info.columns = ['User', 'group_faculty', 'group_out']
+data = pd.merge(results, info, on='User')
 
-x1 = list(average_group.keys())
-y1 = list(round(i[1][0] / i[1][1], 2) for i in average_group.items())
-x2 = list(average_info.keys())
-y2 = list(round(i[1][0] / i[1][1], 2) for i in average_info.items())
+average_group = []
+average_inf = []
+for group in data.loc[:, 'group_faculty']:
+    a = [group,
+         round(data[data['group_faculty'] == group].loc[:, 'Solved'].sum() / data[data['group_faculty'] == group].loc[:,
+                                                                             'User'].size, 2)]
+    if a not in average_group:
+        average_group.append(a)
+for group in data.loc[:, 'group_out']:
+    a = [group, round(
+        data[data['group_out'] == group].loc[:, 'Solved'].sum() / data[data['group_out'] == group].loc[:, 'User'].size,
+        2)]
+    if a not in average_inf:
+        average_inf.append(a)
+x1 = [i[0] for i in average_group]
+y1 = [i[1] for i in average_group]
 plt.bar(x1, y1)
-for i in range(len(x1)):
-    plt.text(x1[i], y1[i], y1[i], ha='center')
 plt.grid()
 plt.xlabel('group_faculty')
 plt.ylabel('average solved')
-plt.savefig('pd2.png')
+for i in range(len(x1)):
+    plt.text(x1[i], y1[i], y1[i], ha='center')
+plt.savefig('pd3_1.png')
 plt.show()
+x2 = [i[0] for i in average_inf]
+y2 = [i[1] for i in average_inf]
 plt.bar(x2, y2)
-for i in range(len(x2)):
-    plt.text(x2[i], y2[i], y2[i], ha='center')
 plt.grid()
 plt.xlabel('group_out')
 plt.ylabel('average solved')
-plt.savefig('pd3.png')
+for i in range(len(x2)):
+    plt.text(x2[i], y2[i], y2[i], ha='center')
+plt.savefig('pd3_2.png')
 plt.show()
 ```
 
 Полученные графики:
 
-![Среднее 1](pd2_1.png)
+![Среднее 1](pd3_!.png)
 
-![Среднее 2](pd2_2.png)
+![Среднее 2](pd3_2.png)
 
 
 ### Задание 2: определить, из каких факультетских групп пришли и в какие группы по информатике попали люди, которые смогли пройти более одного теста в хотя бы одной из двух последних задач.(Задачи G и H в таблице, каждый тест даёт 10 баллов)
