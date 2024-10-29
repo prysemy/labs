@@ -78,40 +78,23 @@ results = pd.read_html('results_ejudge.html')[0]
 info.columns = ['User', 'group_faculty', 'group_out']
 data = pd.merge(results, info, on='User')
 
-average_group = []
-average_inf = []
-for group in data.loc[:, 'group_faculty']:
-    a = [group,
-         round(data[data['group_faculty'] == group].loc[:, 'Solved'].sum() / data[data['group_faculty'] == group].loc[:,
-                                                                             'User'].size, 2)]
-    if a not in average_group:
-        average_group.append(a)
-for group in data.loc[:, 'group_out']:
-    a = [group, round(
-        data[data['group_out'] == group].loc[:, 'Solved'].sum() / data[data['group_out'] == group].loc[:, 'User'].size,
-        2)]
-    if a not in average_inf:
-        average_inf.append(a)
-x1 = [i[0] for i in average_group]
-y1 = [i[1] for i in average_group]
-plt.bar(x1, y1)
-plt.grid()
-plt.xlabel('group_faculty')
-plt.ylabel('average solved')
-for i in range(len(x1)):
-    plt.text(x1[i], y1[i], y1[i], ha='center')
-plt.savefig('pd3_1.png')
-plt.show()
-x2 = [i[0] for i in average_inf]
-y2 = [i[1] for i in average_inf]
-plt.bar(x2, y2)
-plt.grid()
-plt.xlabel('group_out')
-plt.ylabel('average solved')
-for i in range(len(x2)):
-    plt.text(x2[i], y2[i], y2[i], ha='center')
-plt.savefig('pd3_2.png')
-plt.show()
+for groups in [data.loc[:, 'group_faculty'], data.loc[:, 'group_out']]:
+    average_group = []
+    for group in groups:
+        a = [group, round(
+            data[groups == group].loc[:, 'Solved'].sum() / data[groups == group].loc[:,
+                                                                          'User'].size, 2)]
+        if a not in average_group:
+            average_group.append(a)
+    x = [i[0] for i in average_group]
+    y = [i[1] for i in average_group]
+    plt.bar(x, y)
+    plt.grid()
+    plt.xlabel('groups')
+    plt.ylabel('average solved')
+    for i in range(len(x)):
+        plt.text(x[i], y[i], y[i], ha='center')
+    plt.show()
 ```
 
 Полученные графики:
