@@ -39,43 +39,20 @@ def func(pct, allvals):
     absolute = int(np.round(pct / 100. * np.sum(allvals)))
     return f"{pct:.1f}%\n({absolute:d})"
 
-
 flights = pd.read_csv('flights.csv', delimiter=',')
-s = flights.groupby(flights.loc[:, 'CARGO'], as_index=False).size().loc[:, 'size']
-siz = [s[0], s[1], s[2]]
-flights.groupby(flights.loc[:, 'CARGO'], as_index=False).size().plot.pie(y='size',
-                                                                         labels=flights.loc[:,
-                                                                                'CARGO'].drop_duplicates(),
-                                                                         autopct=lambda pct: func(pct, siz),
-                                                                         startangle=300, fontsize=13,
-                                                                         title='Количество перелетов')
-plt.savefig('pd1_1.png')
-plt.show()
-price_Jumbo = flights[flights['CARGO'] == 'Jumbo'].loc[:, 'PRICE'].sum()
-price_Medium = flights[flights['CARGO'] == 'Medium'].loc[:, 'PRICE'].sum()
-price_Numble = flights[flights['CARGO'] == 'Nimble'].loc[:, 'PRICE'].sum()
-pric = [price_Jumbo, price_Medium, price_Numble]
-pd.DataFrame({'PRICES': [price_Jumbo, price_Medium, price_Numble]}).plot.pie(y='PRICES',
-                                                                             labels=flights.loc[:,
-                                                                                    'CARGO'].drop_duplicates(),
-                                                                             autopct=lambda pct: func(pct, pric),
-                                                                             startangle=300,
-                                                                             fontsize=11,
-                                                                             title='Стоимость')
-plt.savefig('pd1_2.png')
-plt.show()
-weight_Jumbo = flights[flights['CARGO'] == 'Jumbo'].loc[:, 'WEIGHT'].sum()
-weight_Medium = flights[flights['CARGO'] == 'Medium'].loc[:, 'WEIGHT'].sum()
-weight_Numble = flights[flights['CARGO'] == 'Nimble'].loc[:, 'WEIGHT'].sum()
-weig = [weight_Jumbo, weight_Medium, weight_Numble]
-pd.DataFrame({'WEIGHTS': [weight_Jumbo, weight_Medium, weight_Numble]}).plot.pie(y='WEIGHTS',
-                                                                                 labels=flights.loc[:,
-                                                                                        'CARGO'].drop_duplicates(),
-                                                                                 autopct=lambda pct: func(pct, weig),
-                                                                                 startangle=30,
-                                                                                 fontsize=13,
-                                                                                 title='Вес')
-plt.savefig('pd1_3.png')
+data = pd.DataFrame(columns=['SIZE', 'PRICE', 'WEIGHT'])
+for cargo in flights['CARGO'].unique():
+    siz = flights[flights['CARGO'] == cargo].shape[0]
+    price = flights[flights['CARGO'] == cargo].loc[:, 'PRICE'].sum()
+    weight = flights[flights['CARGO'] == cargo].loc[:, 'WEIGHT'].sum()
+    data._set_value(index=cargo, col='SIZE', value=siz)
+    data._set_value(index=cargo, col='PRICE', value=price)
+    data._set_value(index=cargo, col='WEIGHT', value=weight)
+print(data)
+print(data.index)
+for yi in ['SIZE', 'PRICE', 'WEIGHT']:
+    data.plot.pie(y=yi, labels=data.index, autopct=lambda pct: func(pct, data.loc[:, yi]), startangle=300,
+                  fontsize=10, title=yi)
 plt.show()
 ```
 
