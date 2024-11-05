@@ -114,5 +114,32 @@ $$\begin{bmatrix}1 & 0 & 0 & ... & 0 & -1 \\
 То есть на главной диагонали расположены элементы 1, с циклическим сдвигом влево на один элемент от главной диагонали расположены -1, все остальные элементы 0.
 
 Посчитаем и визуализируем 255 шагов по времени этого процесса:
+```Python
+data = list(map(float, open('start.dat.txt').readlines()))
+u0 = np.array(data)
+u = []
+A = np.diag(np.full(u0.shape, 1))
+rows, cols = np.indices(A.shape)
+A[rows == cols + 1] = -1
+A[0, 49] = -1
+u.append(u0)
+for i in range(1, 500):
+    u.append(u[i - 1] - np.dot(A, u[i - 1]) / 2)
+t = np.arange(0, 50)
+fig = plt.figure()
+axis = plt.axes(xlim=(0, 50), ylim=(0, 10))
+line, = axis.plot(t, u[0], lw=3, color='purple')
+plt.grid()
+
+
+def animate(i):
+    line.set_data(t, u[i])
+    return line,
+
+
+anim = animation.FuncAnimation(fig, animate, frames=255, interval=200, blit=True)
+anim.save('u.gif', writer='pillow')
+plt.show()
+```
 
 ![u](u.gif)
