@@ -1,9 +1,9 @@
 ## Эпизод 1
 Задана матрица 9х9:
 
-$$\begin{bmatrix}0 & 0 & 0 & -\frac{1}{\ro} & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & -\frac{1}{\ro} & 0 & 0 & 0 & 0 \\\
-0 & 0 & 0 & 0 & 0 & -\frac{1}{\ro} & 0 & 0 & 0 \\\
+$$\begin{bmatrix}0 & 0 & 0 & -\frac{1}{\rho} & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & -\frac{1}{\rho} & 0 & 0 & 0 & 0 \\\
+0 & 0 & 0 & 0 & 0 & -\frac{1}{\rho} & 0 & 0 & 0 \\\
 -(\lambda + 2\mu) & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\\
 0 & -\mu & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\\
 0 & 0 & -\mu & 0 & 0 & 0 & 0 & 0 & 0 \\\
@@ -38,4 +38,4 @@ print('Собственные значения:', list(matrix.eigenvals().keys()
 Собственные значения: [-1.0*sqrt(m/ro), 1.0*sqrt(m/ro), -1.4142135623731*sqrt(0.5*l/ro + m/ro), 1.4142135623731*sqrt(0.5*l/ro + m/ro), 0]
 ```
 
-То есть полученные собственные значения: $-\sqrt{\frac{\mu}{\ro}}$, $\sqrt{\frac{\mu}{\ro}}$, $-\sqrt{2}\sqrt{0.5\frac{\lambda}{\ro} + \frac{\mu}{\ro}}$, $\sqrt{2}\sqrt{0.5\frac{\lambda}{\ro} + \frac{\mu}{\ro}}$
+То есть полученные собственные значения: $-\sqrt{\frac{\mu}{\rho}}$, $\sqrt{\frac{\mu}{\rho}}$, $-\sqrt{2}\sqrt{0.5\frac{\lambda}{\rho} + \frac{\mu}{\rho}}$, $\sqrt{2}\sqrt{0.5\frac{\lambda}{\rho} + \frac{\mu}{\rho}}$
