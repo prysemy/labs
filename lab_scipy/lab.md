@@ -90,3 +90,43 @@ plt.grid()
 plt.savefig('2.png')
 plt.show()
 ```
+
+
+## Эпизод 3
+Задан дифур: $\frac{dy(x)}{dx} = -2y(x), y(0) = \sqrt(2)$
+
+Решите его два раза - один раз символьно SymPy-ем, второй раз численно SciPy-ем.
+
+Выведите решение, найденное SymPy-ем. Постройте графики: (1) обоих решений на отрезке [0; 10], (2) разности решений SymPy-ем и SciPy-ем на этом же отрезке.
+
+![sympy1](3.png)
+
+![scipy](4.png)
+
+```Python
+x = sympy.symbols('x')
+y = sympy.Function('y')
+C1 = sympy.Symbol('C1')
+equation = sympy.Eq(y(x).diff(x), -2 * y(x))
+solution = sympy.dsolve(equation, ics={y(0): 2 ** 0.5})
+print(solution.rhs)
+plot1 = sympy.plot(show=False)
+plot1.append(sympy.plot(solution.rhs, (x, 0, 10), title='Символьное решение sympy', ylabel='y')[0])
+plot1.save('3.png')
+
+
+def dydx(y, x):
+    return -2 * y
+
+
+x = np.linspace(0, 10)
+y0 = 2 ** 0.5
+y = scipy.integrate.odeint(dydx, y0, x)
+plt.plot(x, y)
+plt.title('Численное решение scipy')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.savefig('4.png')
+plt.show()
+
+```
