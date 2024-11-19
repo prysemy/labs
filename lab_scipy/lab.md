@@ -106,6 +106,7 @@ plt.show()
 ![dif](5.png)
 
 ```Python
+
 x = sympy.symbols('x')
 y = sympy.Function('y')
 C1 = sympy.Symbol('C1')
@@ -121,18 +122,22 @@ def dydx(y, x):
     return -2 * y
 
 
-x = np.linspace(0, 10)
+x_list = np.linspace(0, 10)
 y0 = 2 ** 0.5
-y = scipy.integrate.odeint(dydx, y0, x)
-plt.plot(x, y)
+y = scipy.integrate.odeint(dydx, y0, x_list)[:, 0]
+plt.plot(x_list, y)
 plt.title('Численное решение scipy')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.savefig('4.png')
 plt.show()
 
-y2 = 1.4142135623731 * np.exp(-2 * x)
-plt.plot(x, np.array([yi[0] for yi in y]) - y2)
+# y2 = 1.4142135623731 * np.exp(-2 * x)
+y2 = []
+for xi in x_list:
+    y2.append(solution.rhs.subs(x, xi))
+
+plt.plot(x_list, y - y2)
 plt.grid()
 plt.title('Разница решений решений sympy и scipy')
 plt.xlabel('x')
