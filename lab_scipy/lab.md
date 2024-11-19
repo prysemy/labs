@@ -132,7 +132,7 @@ plt.savefig('4.png')
 plt.show()
 
 y2 = 1.4142135623731 * np.exp(-2 * x)
-plt.plot(x, np.array([x[0] for x in y]) - y2)
+plt.plot(x, np.array([yi[0] for yi in y]) - y2)
 plt.grid()
 plt.title('Разница решений решений sympy и scipy')
 plt.xlabel('x')
