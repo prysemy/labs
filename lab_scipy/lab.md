@@ -136,6 +136,7 @@ plt.show()
 y2 = []
 for xi in x_list:
     y2.append(solution.rhs.subs(x, xi))
+y2 = np.array(y2)
 
 plt.plot(x_list, y - y2)
 plt.grid()
